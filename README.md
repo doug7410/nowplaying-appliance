@@ -26,7 +26,25 @@ cd sim && ./run.sh                        # first run fetches LVGL + stb_image +
 
 Needs SDL2 + libcurl dev packages. Mouse = touch; drag to page the mosaic.
 
-## On the Pi (later)
+## On the Pi
 
-LVGL runs on DRM/KMS or fbdev — no compositor or browser. Deploy mirrors the kiosk:
-a `provision.sh` + systemd unit. Not built yet.
+`pi/` is the platform layer the sim's `sim/` is to SDL: LVGL on the Linux **DRM/KMS**
+(default) or **fbdev** display driver + **evdev** touch — no compositor, no browser. It
+reuses `src/ui.cpp`, `src/now_playing.h`, and `sim/backend.cpp` unchanged; only the entry
+point (`pi/main.cpp`) and `pi/lv_conf.h` differ from the sim.
+
+Deploy mirrors the kiosk (`provision.sh` + a systemd unit), run **on the Pi**:
+
+```sh
+cp pi/np.env.example pi/np.env     # set NP_TOKEN (the SHARED appliance token) + NP_BASE_URL
+./provision.sh                     # apt deps -> build -> install + start np-display.service
+#   DISPLAY_BACKEND=fbdev ./provision.sh   # if DRM won't win master on the VT
+```
+
+Notes:
+- Token/host come from `pi/np.env` via the unit's `EnvironmentFile` (out of git + the binary);
+  `backend.cpp` reads `NP_TOKEN`/`NP_BASE_URL` env, falling back to `src/secrets.h`.
+- DRM master is exclusive — the unit takes tty1 (`Conflicts=getty@tty1`, `PAMName=login`)
+  and `provision.sh` disables the old `np-kiosk`. fbdev sidesteps the master fight.
+- Touch panel = `/dev/input/event0` (QDtech MPI5001); override with `NP_TOUCH_DEV` if it moves.
+- Build only the app target: `cmake --build pi/build --target np-display` (skips lvgl demos).

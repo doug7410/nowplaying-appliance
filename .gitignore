@@ -4,3 +4,7 @@ src/secrets.h
 # Sim build artifacts + downloaded single-header deps
 sim/build/
 sim/third_party/
+
+# Pi build artifacts + the runtime config (holds the shared appliance token)
+pi/build/
+pi/np.env
