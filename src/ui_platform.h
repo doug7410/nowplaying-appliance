@@ -10,3 +10,4 @@ void     ui_logf(const char *fmt, ...);   // printf-style log line
 void     ui_free(void *p);                // free a decoded-image buffer (heap_caps_free / free)
 size_t   ui_free_psram(void);             // free PSRAM bytes, for logging (0 on desktop)
 void     ui_request_album(const char *id);// ask the net task to GET /album/{id} (no-op in sim)
+void     ui_clock_hhmm(char *out, size_t n);// wall-clock "H:MM" for the header (system localtime)

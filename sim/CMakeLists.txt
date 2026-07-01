@@ -41,6 +41,9 @@ if(NOT EXISTS ${TP}/json.hpp)
   file(DOWNLOAD https://raw.githubusercontent.com/nlohmann/json/v3.11.3/single_include/nlohmann/json.hpp ${TP}/json.hpp)
 endif()
 
-add_executable(sim main.cpp ../src/ui.cpp backend.cpp)
+add_executable(sim main.cpp ../src/ui.cpp backend.cpp
+  ../src/fonts/montserrat_bold_44.c ../src/fonts/montserrat_semibold_24.c
+  ../src/fonts/montserrat_semibold_18.c)
 target_include_directories(sim PRIVATE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src ${TP})
+target_compile_definitions(sim PRIVATE LV_LVGL_H_INCLUDE_SIMPLE)   # font .c files -> #include "lvgl.h"
 target_link_libraries(sim PRIVATE lvgl SDL2::SDL2 CURL::libcurl)

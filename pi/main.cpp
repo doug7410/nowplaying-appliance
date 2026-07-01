@@ -40,6 +40,11 @@ void ui_logf(const char *fmt, ...) { va_list ap; va_start(ap, fmt); vprintf(fmt,
 void ui_free(void *p) { free(p); }
 size_t ui_free_psram(void) { return 0; }                       // no PSRAM on the Pi
 void ui_request_album(const char *id) { backend_request_album(id); }  // tap -> real GET /album/{id}
+void ui_clock_hhmm(char *out, size_t n) {                             // system localtime, 12h "H:MM"
+  time_t t = time(nullptr); struct tm lt; localtime_r(&t, &lt);
+  int h = lt.tm_hour % 12; if (h == 0) h = 12;
+  snprintf(out, n, "%d:%02d", h, lt.tm_min);
+}
 
 // Mouse/touch-drag -> page swipe. Identical to the sim's swipe_tick — it's pure LVGL
 // indev polling (no SDL), so the evdev pointer drives it unchanged. Latch a horizontal

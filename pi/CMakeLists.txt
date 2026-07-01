@@ -50,12 +50,15 @@ if(NOT EXISTS ${TP}/json.hpp)
   file(DOWNLOAD https://raw.githubusercontent.com/nlohmann/json/v3.11.3/single_include/nlohmann/json.hpp ${TP}/json.hpp)
 endif()
 
-add_executable(np-display main.cpp ../src/ui.cpp ../sim/backend.cpp)
+add_executable(np-display main.cpp ../src/ui.cpp ../sim/backend.cpp
+  ../src/fonts/montserrat_bold_44.c ../src/fonts/montserrat_semibold_24.c
+  ../src/fonts/montserrat_semibold_18.c)
 # NOTE: do NOT put ../sim on the include path — it holds the sim's SDL lv_conf.h, which
 # (searched before lvgl's -isystem pi) would shadow pi/lv_conf.h and disable the DRM driver.
 # main.cpp reaches backend.h via an explicit ../sim/ path instead.
 target_include_directories(np-display PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../src ${TP})
+target_compile_definitions(np-display PRIVATE LV_LVGL_H_INCLUDE_SIMPLE)   # font .c -> #include "lvgl.h"
 target_link_libraries(np-display PRIVATE lvgl CURL::libcurl)
 
 # Both display drivers are compiled into lvgl; NP_USE_FBDEV only picks the create() call
