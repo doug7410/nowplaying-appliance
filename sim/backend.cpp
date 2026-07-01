@@ -6,6 +6,7 @@
 #include <curl/curl.h>
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include <cstring>
 #include <cstdlib>
 #define STB_IMAGE_IMPLEMENTATION
@@ -94,6 +95,34 @@ static uint32_t g_last_poll = 0;
 #define TILE_MAXDIM  160
 #define ALBUM_MAXDIM 180
 
+// ---- decoded-art cache ------------------------------------------------------
+// Re-entering RECENTLY, or re-opening an album, otherwise re-fetches + re-decodes the art
+// synchronously — the ~1 s "switch"/"open" lag. The Pi has RAM to spare, so keep decoded art
+// keyed by url+maxdim (same Apple URL is decoded at 3 sizes: tile/cover/album). Callers get a
+// fresh malloc'd COPY they free as before; the cache keeps its own, so ownership stays clean.
+struct CachedArt { uint16_t *buf; int w, h; };   // buf malloc'd, cache-owned for process life
+static std::unordered_map<std::string, CachedArt> g_art_cache;
+
+static uint16_t *decode_cached(const std::string &url, int maxdim, int &w, int &h) {
+  std::string key = url + "|" + std::to_string(maxdim);
+  auto it = g_art_cache.find(key);
+  if (it == g_art_cache.end()) {
+    std::vector<uint8_t> bytes; int dw, dh;
+    uint16_t *b = http_get_bytes(url, bytes) ? decode_rgb565(bytes, dw, dh, maxdim) : nullptr;
+    if (!b) return nullptr;
+    // ponytail: crude whole-map clear at a ceiling — the working set is one 9-tile page plus a
+    // cover or two, so a long churny session just re-decodes once after a flush. LRU only if it bites.
+    if (g_art_cache.size() >= 64) { for (auto &e : g_art_cache) free(e.second.buf); g_art_cache.clear(); }
+    it = g_art_cache.emplace(key, CachedArt{ b, dw, dh }).first;
+  }
+  const CachedArt &ct = it->second;
+  w = ct.w; h = ct.h;
+  size_t n = (size_t)ct.w * ct.h * 2;
+  uint16_t *copy = (uint16_t *)malloc(n);
+  if (copy) memcpy(copy, ct.buf, n);
+  return copy;
+}
+
 static void parse_np(const std::string &body) {
   memset(&g_np, 0, sizeof g_np);
   try {
@@ -129,8 +158,8 @@ static void handle_cover() {
   g_cover_url = want;
   CoverMsg m; memset(&m, 0, sizeof m);
   if (!want.empty()) {
-    std::vector<uint8_t> bytes; int w, h;
-    if (http_get_bytes(want, bytes)) { uint16_t *b = decode_rgb565(bytes, w, h, COVER_MAXDIM); if (b) { m.buf = b; m.w = (uint16_t)w; m.h = (uint16_t)h; m.ok = true; } }
+    int w, h; uint16_t *b = decode_cached(want, COVER_MAXDIM, w, h);
+    if (b) { m.buf = b; m.w = (uint16_t)w; m.h = (uint16_t)h; m.ok = true; }
   }
   bind_cover(m);   // ok==false -> placeholder
 }
@@ -152,8 +181,8 @@ static void reconcile_tiles() {
     g_slot_url[s] = want;
     TileMsg m; memset(&m, 0, sizeof m); m.slot = (uint8_t)s;
     if (!want.empty()) {
-      std::vector<uint8_t> bytes; int w, h;
-      if (http_get_bytes(want, bytes)) { uint16_t *b = decode_rgb565(bytes, w, h, TILE_MAXDIM); if (b) { m.buf = b; m.w = (uint16_t)w; m.h = (uint16_t)h; m.ok = true; } }
+      int w, h; uint16_t *b = decode_cached(want, TILE_MAXDIM, w, h);
+      if (b) { m.buf = b; m.w = (uint16_t)w; m.h = (uint16_t)h; m.ok = true; }
     }
     ui_apply_tile(m);   // ok==false clears the slot to its placeholder
   }
@@ -200,7 +229,7 @@ void backend_request_album(const char *id) {
   } catch (...) { a.ok = false; }
   ui_apply_album(a);
   if (a.ok && a.cover_url[0]) {
-    std::vector<uint8_t> bytes; int w, h;
-    if (http_get_bytes(a.cover_url, bytes)) { uint16_t *b = decode_rgb565(bytes, w, h, ALBUM_MAXDIM); if (b) { CoverMsg m{b, (uint16_t)w, (uint16_t)h, true}; bind_album_cover(m); } }
+    int w, h; uint16_t *b = decode_cached(a.cover_url, ALBUM_MAXDIM, w, h);
+    if (b) { CoverMsg m{b, (uint16_t)w, (uint16_t)h, true}; bind_album_cover(m); }
   }
 }
