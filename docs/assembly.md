@@ -37,6 +37,24 @@ Carrier board, top:
 
 ## 2. Solder the carrier board
 
+Parts (LCSC numbers in `hardware/carrier-board/assembly/bom-jlc.csv`):
+
+| Ref | Part | Qty |
+|---|---|---|
+| Q1 | AOD403 P-channel MOSFET, TO-252 / DPAK | 1 |
+| R1–R7 | 10 kΩ ¼ W axial | 7 |
+| RG | 100 kΩ ¼ W axial | 1 |
+| C1–C6 | 10 nF 50 V X7R leaded ceramic, 5 mm pitch | 6 |
+| C3V3, C7, CB2 | 100 nF X7R leaded ceramic, 5 mm pitch | 3 |
+| CB1 | 470 µF 10 V electrolytic, radial D8, 3.5 mm pitch | 1 |
+| J_PWR, J_SW, J_PANEL | Screw terminal, 2 position, 5.00 mm pitch | 3 |
+| J_KNOBS | JST B8B-XH-A | 1 |
+| J_MIC | JST B6B-XH-A | 1 |
+| J_PI | JST B5B-XH-A | 1 |
+| JP1, JP2, JP3 | 1×2 pin header 2.54 mm + shunt | 3 |
+| J_ESP_L, J_ESP_R | 1×22 female pin socket 2.54 mm | 2 |
+| J_HUB | 2×8 IDC box header 2.54 mm, shrouded, keyed | 1 |
+
 Order of operations: shortest parts first. Resistors and ceramics, then Q1, then CB1,
 then the headers and sockets, then the screw terminals and JST connectors, then the IDC
 header.
@@ -59,6 +77,15 @@ Nets and connector pinouts are in `hardware/carrier-board/generator/gen_carrier_
 
 ## 3. Solder the knob board
 
+| Ref | Part | Qty |
+|---|---|---|
+| ENC1–3 | Alps EC11E15244G1 rotary encoder with push switch, 20 mm shaft, threaded bushing | 3 |
+| J1 | JST B8B-XH-A | 1 |
+| R1 | 3.3 kΩ ¼ W axial | 1 |
+| R2 | 10 kΩ ¼ W axial | 1 |
+
+![knob board placement, top](../hardware/knob-board/assembly/placement-top.png)
+
 - The three EC11 encoders go on the **top** side, J1, R1 and R2 on the **bottom**. The
   encoders' shield lugs solder to the ground pour.
 - The switch ladder is on this board: ENC1 (MODE) switch direct to ground, ENC2 (BRIGHT)
@@ -73,6 +100,14 @@ drill for the EC11's threaded bushing (7 mm thread; drill 7.2 mm).
 
 ## 4. Solder the mic board
 
+| Ref | Part | Qty |
+|---|---|---|
+| J1 | JST B6B-XH-A | 1 |
+| — | 1×3 pin header, 2.54 mm (mounts the INMP441 module) | 2 |
+| — | INMP441 round breakout, Ø14 mm, two 1×3 rows 7.62 mm apart | 1 |
+
+![mic board placement, top](../hardware/mic-board/assembly/placement-top.png)
+
 Solder the two 1×3 headers and the JST. Mount the INMP441 module on the headers with its
 **label / sound-port side up**, chip side toward the board. The Ø3 mm centre hole is
 acoustic relief so either orientation still hears, but port-up makes the silk labels
@@ -80,6 +115,18 @@ match the module's. L/R is tied to ground on this board (left channel), which is
 the firmware expects. Two M3 holes, 14 mm apart, at the top corners.
 
 ## 5. Power and connector map
+
+Off-board parts for this step:
+
+| Part | Qty |
+|---|---|
+| JST-XH housings + crimp contacts (or pre-crimped XH leads): 8, 6 and 5 positions | 1 each |
+| 2.54 mm female Dupont housing, 1×5 (Pi end of the J_PI cable) | 1 |
+| Panel-mount DC jack, DC-099 style, 5.5 × 2.1 mm | 1 |
+| SPST bat-handle toggle, ≥10 A DC | 1 |
+| 18 AWG hookup wire for the DC-in and toggle legs | ~1 m |
+| 5 V brick, 5.5 × 2.1 mm plug, ≥6 A | 1 |
+| 16-pin HUB75 ribbon + panel power pigtail | ship with the panel |
 
 ```
 wall → 5 V brick → panel-mount DC jack → J_PWR (VIN_RAW)
