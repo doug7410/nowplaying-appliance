@@ -27,6 +27,11 @@ build recipe.
 
 ## Solder
 
+Placement drawings and renders are in `hardware/panelboard/assembly/`
+(`placement-top.png`, `placement-bottom.png`, `placement.pdf`, `render-*.png`).
+
+![panelboard placement](../hardware/panelboard/assembly/placement-top.png)
+
 1. **RPD first.** It sits under the module and is unreachable once the sockets are in.
    It holds IO12 (the G2 line, also the MTDI strapping pin) low at reset; without it
    the chip can come up expecting 1.8 V flash and fail to boot.

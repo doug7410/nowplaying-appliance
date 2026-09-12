@@ -20,6 +20,21 @@ findings. To regenerate a zip from source you need `kicad-cli` (KiCad 9/10) plus
 stock symbol and footprint libraries; `make zip` in each board directory runs ERC + DRC
 first and refuses to build from a board with violations.
 
+## Where the parts go
+
+Every board directory has an `assembly/` folder with placement drawings and renders,
+regenerated from the KiCad files by `hardware/render-assembly.sh`:
+
+| File | What |
+|---|---|
+| `placement-top.png`, `placement-bottom.png` | Outline + footprint outlines + reference designators, as you look at that side (bottom is mirrored) |
+| `placement.pdf` | The same, one page per layer, printable |
+| `render-top.png`, `render-bottom.png` | 3D render of the bare board with silkscreen |
+
+Carrier board, top:
+
+![carrier board placement](../hardware/carrier-board/assembly/placement-top.png)
+
 ## 2. Solder the carrier board
 
 Order of operations: shortest parts first. Resistors and ceramics, then Q1, then CB1,
