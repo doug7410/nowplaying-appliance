@@ -1,0 +1,14 @@
+Comment,Designator,Footprint,LCSC Part #
+AOD403 P-FET,Q1,TO-252-3_TabPin2,C28969
+10k axial 1/4W,"R1,R2,R3,R4,R5,R6,R7",R_Axial_DIN0207_P7.62mm,C61299
+100k axial 1/4W,RG,R_Axial_DIN0207_P7.62mm,C120103
+10nF 50V X7R leaded MLCC,"C1,C2,C3,C4,C5,C6",C_Disc_D5.0mm_P5.00mm,C1620232
+100nF 100V X7R leaded MLCC,"C3V3,C7,CB2",C_Disc_D5.0mm_P5.00mm,C1622885
+470uF 10V radial D8 P3.5,CB1,CP_Radial_D8.0mm_P3.50mm,C1579341
+Screw terminal header 5.00mm 2P (MSTBVA-compatible),"J_PWR,J_SW,J_PANEL","PhoenixContact_MSTBVA_2,5_2-G",C441375
+JST B8B-XH-A,J_KNOBS,JST_XH_B8B-XH-A_Vertical,C157972
+JST B6B-XH-A,J_MIC,JST_XH_B6B-XH-A_Vertical,C144397
+JST B5B-XH-A,J_PI,JST_XH_B5B-XH-A_Vertical,C157991
+Pin header 1x2 2.54mm,"JP1,JP2,JP3",PinHeader_1x02_P2.54mm,C32713268
+Pin socket 1x22 2.54mm,"J_ESP_L,J_ESP_R",PinSocket_1x22_P2.54mm,C41376161
+IDC box header 2x8 2.54mm,J_HUB,IDC-Header_2x08_Latch,C53207556

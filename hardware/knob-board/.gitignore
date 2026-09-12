@@ -1,0 +1,9 @@
+gerbers/
+knob-board-jlc.zip
+*.rpt
+*.net
+*.kicad_prl
+fp-info-cache
+*-backups/
+*.lck
+.history/
