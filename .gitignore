@@ -1,0 +1,9 @@
+# KiCad build output (regenerate with make check / make gerbers)
+hardware/*/gerbers/
+hardware/*/*.rpt
+hardware/*/*.net
+hardware/*/*.kicad_prl
+hardware/*/fp-info-cache
+hardware/*/*-backups/
+hardware/*/*.lck
+hardware/*/.history/
