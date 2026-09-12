@@ -35,9 +35,14 @@ Two gitignored files carry the secrets. Create both in the fork's checkout.
 [env:board1]
 extends = env:esp32S3_8MB_PSRAM_M_opi
 
+; N16R8 devkit:
 board_build.flash_size = 16MB
 board_upload.flash_size = 16MB
 board_build.partitions = ${esp32.extreme_partitions}   ; 16MB: 3.2MB firmware, 9MB FS
+; N8R8 devkit instead: use these three lines. 8MB: 2MB firmware (the build is ~1.9MB), 3.9MB FS
+;board_build.flash_size = 8MB
+;board_upload.flash_size = 8MB
+;board_build.partitions = ${esp32.large_partitions}
 
 upload_port = /dev/ttyACM0
 monitor_port = /dev/ttyACM0
