@@ -43,9 +43,14 @@ derives all state server-side; the boards render dumb.
 | `hardware/carrier-board/` | KiCad source + JLCPCB zip for the interconnect PCB (ESP32-S3 socket, power, HUB75, knobs, mic, Pi) |
 | `hardware/knob-board/` | KiCad source + zip for the 3-encoder front-panel PCB. Also the front-panel drilling template |
 | `hardware/mic-board/` | KiCad source + zip for the INMP441 breakout adapter |
+| `hardware/panelboard/` + [`docs/panelboard.md`](docs/panelboard.md) | **The minimal build:** a standalone HUB75 driver board for a stock ESP32-WROOM-32 dev board, runs upstream WLED-MM unmodified. Just the LED matrix, none of the rest |
 | `display/` | The Board 2 display app (LVGL, C++). Runs on the Pi via DRM/KMS, and on a desktop as an SDL simulator |
 
 ## Build order
+
+Only want the LED spectrum on a panel? Build the [panelboard](docs/panelboard.md)
+instead: one small PCB, a $5 ESP32 dev board, upstream WLED-MM, done. The rest of this
+list is the full appliance.
 
 1. Read [`BOM.md`](BOM.md) and order everything. The three PCBs are bare boards from
    JLCPCB, roughly $20 for five of each, hand-soldered.

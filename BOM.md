@@ -101,6 +101,20 @@ own protection are upstream.
 | Passive heatsink for the Pi | **No fan**: the mic would hear it. Vent the cavity. |
 | Fasteners, hookup wire, heat-shrink | |
 
+## Panelboard: the matrix-only build
+
+Not part of the appliance; an alternative to it. One PCB, one stock ESP32-WROOM-32 dev
+board, one panel, one 5 V supply. Full parts table and recipe in
+[`docs/panelboard.md`](docs/panelboard.md).
+
+| Bucket | ~$ |
+|---|---|
+| Panelboard PCB (5 pcs) + parts | 12 |
+| ESP32-WROOM-32 38-pin dev board (narrow, 0.9" rows) | 5 |
+| 64×32 P4 HUB75 panel | 30 |
+| 5 V ≥3 A supply | 10 |
+| **Total** | **~$57** |
+
 ## Roll-up
 
 | Bucket | ~$ |
