@@ -177,8 +177,11 @@ There are **no spare GPIOs**. Adding anything means removing something.
 
 ## 6. Bench test before seating anything
 
-1. Nothing in the sockets, no Pi, no panel. Plug in the brick, toggle on. Measure 5 V at
-   J_PANEL and across JP1, JP2, JP3. Reverse the brick's polarity if you can and confirm
+1. Nothing in the sockets, no Pi, no panel, all three shunts out. **The master toggle is
+   in series with the + rail, so J_SW must be closed**: wire the toggle to it, or put a
+   short jumper wire across the two J_SW terminals for the bench. Otherwise J_PWR reads
+   5 V and J_PANEL reads nothing. Plug in the brick, toggle on. Measure 5 V (DC volts,
+   red probe in the VΩ socket) at J_PANEL and at the P5V pin of JP1, JP2, JP3. Reverse the brick's polarity if you can and confirm
    nothing gets warm: Q1 should block.
 2. Toggle off. Plug the panel ribbon into J_HUB and the panel pigtail into J_PANEL.
 3. Seat the ESP32-S3 (already flashed and provisioned, see
