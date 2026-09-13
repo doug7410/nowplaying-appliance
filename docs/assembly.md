@@ -153,6 +153,21 @@ wall → 5 V brick → panel-mount DC jack → J_PWR (VIN_RAW)
 | J_MIC | 1–6 | MIC_SCK, MIC_WS, MIC_SD, GND, P3V3, GND | Mic board J1, 1:1 |
 | J_PI | 1–5 | PI_5V_A, PI_5V_B, GND, UART_RX, UART_TX | Pi header **pins 2, 4, 6, 8, 10** in that order |
 
+**Wire colours.** No JST standard exists; the only rule is red for supplies, black for
+ground, never either for a signal. The scheme used here (XH pin 1 is at the notched end
+of the housing, matching the arrow on the silk):
+
+| Pin | Mic (6P) | Knobs (8P) | Pi (5P) |
+|---|---|---|---|
+| 1 | MIC_SCK yellow | MODE_A yellow | PI_5V_A red |
+| 2 | MIC_WS green | MODE_B orange | PI_5V_B red |
+| 3 | MIC_SD white | BRIGHT_A green | GND black |
+| 4 | GND black | BRIGHT_B blue | UART_RX green (Pi pin 8, TXD) |
+| 5 | P3V3 red | GAIN_A white | UART_TX white (Pi pin 10, RXD) |
+| 6 | GND black | GAIN_B grey | |
+| 7 | | SW_LADDER brown | |
+| 8 | | GND black | |
+
 The Pi cable is deliberately straight: J_PI pin 4 (ESP32 RX, GPIO 17) lands on Pi pin 8
 (TXD) and pin 5 (ESP32 TX, GPIO 18) on Pi pin 10 (RXD). The crossover is on the carrier.
 Both sides are 3.3 V, no level shifter. 115200 8N1.
